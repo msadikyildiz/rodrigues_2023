@@ -1,0 +1,28 @@
+
+PROJECT_PATH="/work/rodrigues_2023/"
+cd $PROJECT_PATH
+
+DIRECTORY="$PROJECT_PATH/data/raw/genewiz_initial_barcodes"
+INDEX="$PROJECT_PATH/data/reference/amplicon_bowtie2_index/amplicon_bgiseq"
+OUTPUT_FOLDER="$PROJECT_PATH/data/alignment/genewiz_initial_barcodes"
+mkdir -p $OUTPUT_FOLDER
+
+SAMPLE="MR-P7-BCint-N1"
+FWD="$DIRECTORY/${SAMPLE}_R1_001.fastq.gz"
+REV="$DIRECTORY/${SAMPLE}_R2_001.fastq.gz"
+
+bowtie2 -x $INDEX   \
+-p 32               \
+-1 $FWD -2 $REV     \
+--very-sensitive-local   \
+--no-unal           \
+--no-mixed          \
+--no-discordant     \
+--ma 2              \
+--rdg 15,1          \
+--rfg 1000,1000     \
+| samtools view -bS - | samtools sort -o $OUTPUT_FOLDER/$SAMPLE.bam -
+
+samtools index $OUTPUT_FOLDER/$SAMPLE.bam
+echo "$SAMPLE is aligned." >>/dev/stderr
+

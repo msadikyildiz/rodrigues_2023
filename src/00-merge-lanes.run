@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+DIRECTORY="../data/raw/genewiz"
+OUTPUT="../data/genewiz"
+
+touch "${OUTPUT}_fwd.fastq.gz"
+touch "${OUTPUT}_rev.fastq.gz"
+for i in $DIRECTORY/*R1_001.fastq.gz; do
+    cat $i >> "${OUTPUT}_fwd.fastq.gz"
+done
+
+for i in $DIRECTORY/*R2_001.fastq.gz; do
+    cat $i >> "${OUTPUT}_rev.fastq.gz"
+done
+

@@ -1,0 +1,11 @@
+name: rodrigues_2023
+channels: 
+  - defaults
+  - anaconda
+dependencies:
+  - python>=3.10
+  - numpy
+  - pandas
+  - seaborn
+  - matplotlib
+  - jupyter

@@ -1,0 +1,25 @@
+
+cd /work/rodrigues_2023/
+
+conda activate toprak-ngs
+
+DATA_DIRECTORY="/work/rodrigues_2023/data/raw/isolates"
+TOOL_DIRECTORY="/work/rodrigues_2023/tools/flash-1.2.11"
+OUTPUT_FOLDER="/work/rodrigues_2023/data/flash-paired/isolates"
+
+for SAMPLE_PATH in $DATA_DIRECTORY/*001.fastq.gz; do
+    SAMPLE=${SAMPLE_PATH##*/}
+    SAMPLE=${SAMPLE%_R*.fastq.gz}
+    FWD="$DATA_DIRECTORY/${SAMPLE}_R1_001.fastq.gz"
+    REV="$DATA_DIRECTORY/${SAMPLE}_R2_001.fastq.gz"
+    
+    $TOOL_DIRECTORY/flash               \
+    --max-overlap=90                    \
+    --output-prefix=$SAMPLE             \
+    --output-directory=$OUTPUT_FOLDER   \
+    --threads 32                        \
+    --compress                          \
+    $FWD $REV
+done
+
+printf "$SAMPLE is paired." >>/dev/stderr

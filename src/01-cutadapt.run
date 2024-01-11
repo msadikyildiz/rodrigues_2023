@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH -p super 		# partition name
+#SBATCH -t 1-4:00 		# hours:minutes runlimit after which job will be killed
+#SBATCH -c 32           # number of cores requested -- this needs to be greater than or equal to the number of cores you plan to use to run your job
+#SBATCH --job-name cutadapt 		    # Job name
+#SBATCH -o 01-cutadapt-%j.out			# File to which standard out will be written
+#SBATCH -e 01-cutadapt-%j.err 		    # File to which standard err will be written
+
+source /home2/s414024/.bashrc
+cd /work/rodrigues_2023/
+
+conda activate toprak-ngs
+
+cutadapt  -j=32 \
+--adapter 'manually identified'='CTGTCTCTTATA' \
+-A 'manually identified'='CTGTCTCTTATA' \
+--output data/BGI_fwd_cutadapt.fastq.gz \
+--paired-output data/BGI_rev_cutadapt.fastq.gz \
+--error-rate=0.1 --times=1 --overlap=3 --action=trim \
+data/BGI_fwd.fastq.gz data/BGI_rev.fastq.gz

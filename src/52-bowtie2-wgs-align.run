@@ -1,0 +1,35 @@
+
+EXP_ID="20230503"
+PROJECT_PATH="/work/rodrigues_2023/"
+DATA_PATH="$PROJECT_PATH/data/raw/$EXP_ID"
+OUTPUT_DIR="$PROJECT_PATH/data/alignment/$EXP_ID/bowtie2_mr_cli_clc_rast"
+INDEX="$PROJECT_PATH/data/genome_assembly/MR_Cli/02_rast_annotation_by_marinelle/01_bowtie2_index/MR_Cli_clc_rast"
+
+TEMP_FILE_PATH="~"
+mkdir -p $OUTPUT_DIR
+
+FASTQ=($DATA_PATH/*_R1_001.fastq.gz)
+# BioHPC allows for 1000 job array maximum, submit sbatch jobs in 1000 increments
+# by manually updating the offset to +0, +1000, +2000, etc.
+let "TASK_ID = $SLURM_ARRAY_TASK_ID + 0"
+SAMPLE_PATH=${FASTQ[$TASK_ID]}
+SAMPLE_ID=${SAMPLE_PATH##*/}
+SAMPLE_ID=${SAMPLE_ID%_R1_001.fastq.gz}
+
+echo "TASKID: $TASK_ID \t SAMPLE_ID: $SAMPLE_ID"
+
+SAMPLE=${SAMPLE_PATH%_R1_001.fastq.gz}
+FWD="${SAMPLE}_R1_001.fastq.gz"
+REV="${SAMPLE}_R2_001.fastq.gz"
+
+bowtie2 -x $INDEX   \
+-p 32               \
+-1 $FWD -2 $REV     \
+--very-sensitive-local   \
+--no-unal           \
+--no-mixed          \
+--no-discordant     \
+| samtools view -bS - | samtools sort -o $OUTPUT_DIR/$SAMPLE_ID.bam -
+
+samtools index $OUTPUT_DIR/$SAMPLE_ID.bam
+echo "$SAMPLE_ID is aligned." >>/dev/stderr

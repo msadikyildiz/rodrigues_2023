@@ -1,0 +1,22 @@
+PROJECT_PATH="/work/rodrigues_2023/"
+cd $PROJECT_PATH
+
+DIRECTORY="$PROJECT_PATH/data/alignment/bowtie2_isolates_amplicon"
+REFERENCE_FASTA="$PROJECT_PATH/data/reference/amplicon_bgiseq.fasta"
+OUTPUT_FOLDER="$PROJECT_PATH/dump/20230503/barcode-counts"
+mkdir -p $OUTPUT_FOLDER
+
+for SAMPLE_PATH in $DIRECTORY/*.bam; do
+    SAMPLE=${SAMPLE_PATH##*/}
+    SAMPLE=${SAMPLE%.bam}
+
+    python3 src/30-find-barcodes.py        \
+        --bam $SAMPLE_PATH        \
+        --fasta $REFERENCE_FASTA            \
+        --contig amplicon_bgiseq            \
+        --barcode-start 129                 \
+        --barcode-stop 148                  \
+        --maximum-missing-coverage 3        \
+        --output $OUTPUT_FOLDER/$SAMPLE
+    echo "$SAMPLE is counted." >>/dev/stderr
+done

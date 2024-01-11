@@ -1,0 +1,34 @@
+
+EXP_ID="sup_table_2"
+PROJECT_PATH="/work/rodrigues_2023/"
+DATA_PATH="$PROJECT_PATH/data/alignment/$EXP_ID/bowtie2_mr_cli_clc_rast_02"
+OUTPUT_DIR="$PROJECT_PATH/data/variant_call/$EXP_ID/bowtie2_mr_cli_clc_rast_pilon"
+
+PILON="$PROJECT_PATH/tools/pilon-1.24.jar"
+GENOME="$PROJECT_PATH/data/genome_assembly/MR_Cli/02_rast_annotation_by_marinelle/all_ATEC_annotated_contigs.fa"
+
+TEMP_FILE_PATH="~"
+mkdir -p $OUTPUT_DIR
+
+BAM=($DATA_PATH/*.bam)
+# BioHPC allows for 1000 job array maximum, submit sbatch jobs in 1000 increments
+# by manually updating the offset to +0, +1000, +2000, etc.
+let "TASK_ID = $SLURM_ARRAY_TASK_ID + 0"
+SAMPLE_PATH=${BAM[$TASK_ID]}
+SAMPLE_ID=${SAMPLE_PATH##*/}
+SAMPLE_ID=${SAMPLE_ID%.bam}
+
+echo "TASKID: $TASK_ID \t SAMPLE_ID: $SAMPLE_ID"
+
+java -Xmx28G -jar $PILON \
+--genome $GENOME         \
+--outdir $OUTPUT_DIR     \
+--output $SAMPLE_ID      \
+--frags $SAMPLE_PATH     \
+--variant --changes --tracks
+
+gzip $OUTPUT_DIR/$SAMPLE_ID.vcf
+gzip $OUTPUT_DIR/$SAMPLE_ID.fasta
+gzip $OUTPUT_DIR/$SAMPLE_ID*.wig
+
+echo "$SAMPLE_ID is aligned." >>/dev/stderr

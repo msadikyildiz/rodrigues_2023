@@ -1,0 +1,24 @@
+PROJECT_PATH="/work/rodrigues_2023/"
+cd $PROJECT_PATH
+
+DIRECTORY="$PROJECT_PATH/data/flash-paired/isolates"
+INDEX="$PROJECT_PATH/data/reference/amplicon_bowtie2_index/amplicon_bgiseq"
+OUTPUT_FOLDER="$PROJECT_PATH/data/alignment/isolates"
+
+for SAMPLE_PATH in $DIRECTORY/*.extendedFrags.fastq.gz; do
+    SAMPLE=${SAMPLE_PATH##*/}
+    SAMPLE=${SAMPLE%.extendedFrags.fastq.gz}
+    
+    bowtie2 -x $INDEX   \
+    -p 56               \
+    -q $SAMPLE_PATH     \
+    --very-sensitive-local   \
+    --no-unal           \
+    --ma 2              \
+    --rdg 15,1          \
+    --rfg 1000,1000     \
+    | samtools view -bS - | samtools sort -o $OUTPUT_FOLDER/$SAMPLE.bam -
+
+    samtools index $OUTPUT_FOLDER/$SAMPLE.bam
+    echo "$SAMPLE is aligned." >>/dev/stderr
+done

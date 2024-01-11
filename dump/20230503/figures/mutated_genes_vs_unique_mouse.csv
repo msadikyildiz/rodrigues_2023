@@ -1,0 +1,28 @@
+PRODUCT,Treated_Mouse,Untreated_Mouse,Unique_Barcode,Treated_Mice,Untreated_Mice,E
+Transcriptional activator of cad operon,3,0,2,"{'C3N', 'C4R', 'C4L'}",set(),3
+Undecaprenyl-phosphate galactosephosphotransferase (EC 2.7.8.6),3,0,2,"{'C3L', 'C4R', 'C4N'}",set(),3
+Methyl-accepting chemotaxis protein II (aspartate chemoreceptor protein),1,0,1,{'C4R'},set(),1
+"Rhodanese domain protein, Enterobacterial subgroup, YceA homolog",1,0,1,{'C4L'},set(),1
+"Galactose/methyl galactoside ABC transporter, substrate-binding protein MglB (EC 3.6.3.17)",1,0,1,{'C3L'},set(),1
+Uncharacterized lipoprotein YedD,1,0,1,{'C4R'},set(),1
+Uncharacterized protein YdiJ,1,0,1,{'C3N'},set(),1
+"DNA-binding transcriptional activator DecR, AsnC family",1,0,1,{'C3N'},set(),1
+"Transcriptional activator of maltose regulon, MalT",4,3,4,"{'C3N', 'C3L', 'C4R', 'C4L'}","{'C2RL', 'C1L', 'C1N'}",1
+Mobile element protein,1,0,1,{'C4L'},set(),1
+Protein RhsD,6,6,18,"{'C3N', 'C4L', 'C3R', 'C3L', 'C4R', 'C4N'}","{'C1R', 'C1N', 'C2RL', 'C1L', 'C2R', 'C2N'}",0
+"Maltodextrin ABC transporter, substrate-binding protein MdxE",1,1,3,{'C3L'},{'C2R'},0
+"Maltodextrin ABC transporter, permease protein MdxF",2,2,1,"{'C4R', 'C4L'}","{'C1L', 'C2N'}",0
+IncF plasmid conjugative transfer pilus assembly protein TraF,6,6,29,"{'C3N', 'C4L', 'C3R', 'C3L', 'C4R', 'C4N'}","{'C1R', 'C1N', 'C2RL', 'C1L', 'C2R', 'C2N'}",0
+YihA,2,2,1,"{'C4R', 'C4L'}","{'C1L', 'C2N'}",0
+Haemolysin expression modulating protein,2,2,1,"{'C4R', 'C4L'}","{'C1L', 'C2N'}",0
+Uncharacterized protein YodC,0,1,1,set(),{'C1N'},-1
+hypothetical protein,5,6,11,"{'C3N', 'C4L', 'C3L', 'C4R', 'C4N'}","{'C1R', 'C1N', 'C2RL', 'C2R', 'C1L', 'C2N'}",-1
+"Copper/silver efflux RND transporter, transmembrane protein CusA",0,1,1,set(),{'C2N'},-1
+"iron aquisition yersiniabactin synthesis enzyme (Irp1,polyketide synthetase) @ Siderophore biosynthesis non-ribosomal peptide synthetase modules",0,1,1,set(),{'C2RL'},-1
+RNA polymerase sigma-54 factor RpoN,0,1,1,set(),{'C2RL'},-1
+"Permease, YjgP/YjgQ family",0,1,1,set(),{'C2RL'},-1
+Maltose regulon regulatory protein MalI (repressor for malXY),5,6,2,"{'C3N', 'C4L', 'C3L', 'C4R', 'C4N'}","{'C1R', 'C1N', 'C2RL', 'C1L', 'C2R', 'C2N'}",-1
+"Maltodextrin ABC transporter, permease protein MdxG",0,1,1,set(),{'C2N'},-1
+IS1 protein InsA,4,5,9,"{'C3N', 'C3L', 'C4L', 'C4N'}","{'C1R', 'C2RL', 'C1L', 'C2R', 'C2N'}",-1
+Fructoselysine/psicoselysine transporter FrlA,0,1,1,set(),{'C1N'},-1
+Osmolarity sensory histidine kinase EnvZ,0,2,1,set(),"{'C1L', 'C1N'}",-2

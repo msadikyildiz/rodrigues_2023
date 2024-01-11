@@ -1,0 +1,27 @@
+
+PROJECT_PATH="/work/rodrigues_2023/"
+cd $PROJECT_PATH
+
+DIRECTORY="$PROJECT_PATH/data/raw/sup_table_2"
+INDEX="$PROJECT_PATH/data/genome_assembly/MR_Cli/02_rast_annotation_by_marinelle/02_bowtie2_index/MR_Cli_clc_rast"
+OUTPUT_FOLDER="$PROJECT_PATH/data/alignment/sup_table_2/bowtie2_mr_cli_clc_rast_02"
+mkdir -p $OUTPUT_FOLDER
+
+for SAMPLE_PATH in $DIRECTORY/*R1_001.fastq.gz; do
+    SAMPLE=${SAMPLE_PATH##*/}
+    SAMPLE=${SAMPLE%_R1_001.fastq.gz}
+    FWD="$DIRECTORY/${SAMPLE}_R1_001.fastq.gz"
+    REV="$DIRECTORY/${SAMPLE}_R2_001.fastq.gz"
+    
+    bowtie2 -x $INDEX   \
+    -p 32               \
+    -1 $FWD -2 $REV     \
+    --very-sensitive-local   \
+    --no-unal           \
+    --no-mixed          \
+    --no-discordant     \
+    | samtools view -bS - | samtools sort -o $OUTPUT_FOLDER/$SAMPLE.bam -
+
+    samtools index $OUTPUT_FOLDER/$SAMPLE.bam
+    echo "$SAMPLE is aligned." >>/dev/stderr
+done

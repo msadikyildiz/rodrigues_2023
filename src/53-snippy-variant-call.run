@@ -1,0 +1,33 @@
+
+EXP_ID="isolates"
+PROJECT_PATH="/work/rodrigues_2023/"
+DATA_PATH="$PROJECT_PATH/data/raw/$EXP_ID"
+OUTPUT_DIR="$PROJECT_PATH/data/variant_call/$EXP_ID/mr_cli_clc_rast_snippy"
+GBK="$PROJECT_PATH/data/genome_assembly/MR_Cli/02_rast_annotation_by_marinelle/all_ATEC_annotated_contigs_w_locustag.gb"
+
+
+TEMP_FILE_PATH="~"
+mkdir -p $OUTPUT_DIR
+
+FASTQ=($DATA_PATH/C4N*_R1_001.fastq.gz)
+# BioHPC allows for 1000 job array maximum, submit sbatch jobs in 1000 increments
+# by manually updating the offset to +0, +1000, +2000, etc.
+let "TASK_ID = $SLURM_ARRAY_TASK_ID + 0"
+SAMPLE_PATH=${FASTQ[$TASK_ID]}
+SAMPLE_ID=${SAMPLE_PATH##*/}
+SAMPLE_ID=${SAMPLE_ID%_R1_001.fastq.gz}
+
+echo "TASKID: $TASK_ID \t SAMPLE_ID: $SAMPLE_ID"
+
+SAMPLE=${SAMPLE_PATH%_R1_001.fastq.gz}
+FWD="${SAMPLE}_R1_001.fastq.gz"
+REV="${SAMPLE}_R2_001.fastq.gz"
+
+snippy                  \
+    --ref $GBK          \
+    --cpus 16           \
+    --R1 $FWD           \
+    --R2 $REV           \
+    --outdir $OUTPUT_DIR/$SAMPLE_ID
+
+echo "$SAMPLE_ID is snipped." >>/dev/stderr

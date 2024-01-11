@@ -1,0 +1,26 @@
+PROJECT_PATH="/work/rodrigues_2023/"
+cd $PROJECT_PATH
+
+DIRECTORY="$PROJECT_PATH/data"
+INDEX="$PROJECT_PATH/data/reference/amplicon_bowtie2_index/amplicon_bgiseq"
+OUTPUT_FOLDER="$PROJECT_PATH/data/alignment/bowtie2_bgi_combined"
+
+SAMPLE="BGI"
+FWD="$DIRECTORY/${SAMPLE}_fwd.fastq.gz"
+REV="$DIRECTORY/${SAMPLE}_rev.fastq.gz"
+
+bowtie2 -x $INDEX   \
+-p 32               \
+-1 $FWD -2 $REV     \
+--very-sensitive-local   \
+--no-unal           \
+--no-mixed          \
+--no-discordant     \
+--ma 2              \
+--rdg 15,1          \
+--rfg 1000,1000     \
+| samtools view -bS - | samtools sort -o $OUTPUT_FOLDER/$SAMPLE.bam -
+
+samtools index $OUTPUT_FOLDER/$SAMPLE.bam
+echo "$SAMPLE is aligned." >>/dev/stderr
+
